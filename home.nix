@@ -1,8 +1,12 @@
-{ config, pkgs, username, ... }:
+{ config, pkgs, username, inputs, ... }:
 let
   link = config.lib.file.mkOutOfStoreSymlink;
 in
 {
+  imports = [
+    inputs.zen-browser.homeModules.beta
+  ];
+  
   home.username = username;
   home.homeDirectory = "/home/${username}";
   home.stateVersion = "25.11";
@@ -20,6 +24,10 @@ in
     qbittorrent
     zsh-powerlevel10k
   ];
+
+  programs.zen-browser = {
+    enable = true;
+  };
 
   programs.direnv = {
     enable = true;
