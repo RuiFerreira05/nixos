@@ -1,5 +1,7 @@
 { config, pkgs, username, ... }:
-
+let
+  link = config.lib.file.mkOutOfStoreSymlink;
+in
 {
   home.username = username;
   home.homeDirectory = "/home/${username}";
