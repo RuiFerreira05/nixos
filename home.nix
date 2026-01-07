@@ -69,6 +69,7 @@ in
       nixswitch = "sudo nixos-rebuild switch --flake ~/nixos-conf/";
       nixtest = "sudo nixos-rebuild test --flake ~/nixos-conf/";
       hyprconf = "sudo nvim ~/nixos-conf/config/hypr/hyprland.conf";
+      codenix = "code -r ~/nixos-conf/";
     };
 
     oh-my-zsh = {
