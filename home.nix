@@ -24,6 +24,7 @@ in
     qbittorrent
     zsh-powerlevel10k
     gcr
+    onedriver
   ];
 
   services.gnome-keyring = {
@@ -66,6 +67,8 @@ in
       nixflake = "sudo nvim ~/nixos-conf/flake.nix";
       nixhome = "sudo nvim ~/nixos-conf/home.nix";
       nixswitch = "sudo nixos-rebuild switch --flake ~/nixos-conf/";
+      nixtest = "sudo nixos-rebuild test --flake ~/nixos-conf/";
+      hyprconf = "sudo nvim ~/nixos-conf/config/hypr/hyprland.conf";
     };
 
     oh-my-zsh = {
@@ -88,7 +91,7 @@ in
   };
 
   home.file = {
-    ".p10k.zsh".source = ./p10k.zsh;
+    ".p10k.zsh".source = ./config/p10k.zsh;
   };
 
   xdg.configFile = {
