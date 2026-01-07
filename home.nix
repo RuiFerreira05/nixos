@@ -91,9 +91,12 @@ in
     ".p10k.zsh".source = ./p10k.zsh;
   };
 
+  xdg.configFile = {
+    "hypr".source = link "/home/rui/nixos-conf/config/hypr";
+  };
+
   #xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink 
   #  "/home/${username}/nixos-config/configs/nvim";
-
 
   programs.home-manager.enable = true;
 }
