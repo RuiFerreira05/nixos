@@ -23,7 +23,12 @@ in
     google-chrome
     qbittorrent
     zsh-powerlevel10k
+    gcr
   ];
+
+  services.gnome-keyring = {
+    enable = true;
+  };
 
   programs.zen-browser = {
     enable = true;

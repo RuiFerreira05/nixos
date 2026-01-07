@@ -9,6 +9,13 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  security.pam.services = {
+    sddm.enableKwallet = true;
+    sddm.enableGnomeKeyring = true;
+    login.enableKwallet = true;
+    login.enableGnomeKeyring = true;
+  };
+
   # Bootloader.
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.loader.systemd-boot.enable = false;
@@ -125,6 +132,7 @@
     lenovo-legion
     playerctl
     unzip
+    kdePackages.kwallet-pam
   ];
 
   qt.enable = true;
