@@ -98,8 +98,5 @@ in
     "hypr".source = link "/home/rui/nixos-conf/config/hypr";
   };
 
-  #xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink 
-  #  "/home/${username}/nixos-config/configs/nvim";
-
   programs.home-manager.enable = true;
 }
