@@ -16,6 +16,17 @@
     login.enableGnomeKeyring = true;
   };
 
+  services.resolved = {
+    enable = true;
+    # Disable local broadcasting which can confuse some routers
+    extraConfig = ''
+      DNS=1.1.1.1 8.8.8.8
+      FallbackDNS=1.1.1.1 8.8.8.8
+      LLMNR=false
+      MulticastDNS=false
+    '';
+  };
+
   # Bootloader.
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.loader.systemd-boot.enable = false;
@@ -31,7 +42,21 @@
     hostName = host;
     networkmanager.enable = true;
     enableIPv6 = false;
+    nameservers = [ 
+      "1.1.1.1"
+      "8.8.8.8" 
+    ];
   };
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc
+    zlib
+    openssl
+    curl
+    glib
+    util-linux
+  ];
 
   time.timeZone = "Europe/Lisbon";
 

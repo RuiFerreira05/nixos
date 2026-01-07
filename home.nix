@@ -50,6 +50,11 @@ in
     };
   };
 
+  programs.gh = {
+    enable = true;
+    gitCredentialHelper.enable = true;
+  };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -60,6 +65,7 @@ in
       nixconf = "sudo nvim ~/nixos-conf/configuration.nix";
       nixflake = "sudo nvim ~/nixos-conf/flake.nix";
       nixhome = "sudo nvim ~/nixos-conf/home.nix";
+      nixswitch = "sudo nixos-rebuild switch --flake ~/nixos-conf/";
     };
 
     oh-my-zsh = {
