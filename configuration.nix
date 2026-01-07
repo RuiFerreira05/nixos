@@ -27,8 +27,11 @@
     useOSProber = true;
   };
 
-  networking.hostName = host;
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = host;
+    networkmanager.enable = true;
+    enableIPv6 = false;
+  };
 
   time.timeZone = "Europe/Lisbon";
 

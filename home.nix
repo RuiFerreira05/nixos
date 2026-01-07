@@ -46,6 +46,7 @@ in
         name = "RuiFerreira05";
 	email = "ruimf.05@gmail.com";
       };
+      init.defaultBranch = "main";
     };
   };
 
@@ -54,6 +55,12 @@ in
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+
+    shellAliases = {
+      nixconf = "sudo nvim ~/nixos-conf/configuration.nix";
+      nixflake = "sudo nvim ~/nixos-conf/flake.nix";
+      nixhome = "sudo nvim ~/nixos-conf/home.nix";
+    };
 
     oh-my-zsh = {
       enable = true;
