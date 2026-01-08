@@ -191,7 +191,6 @@
     playerctl
     unzip
     kdePackages.kwallet-pam
-    nixfmt
   ];
 
   qt.enable = true;

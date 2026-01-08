@@ -34,6 +34,10 @@ in
     networkmanagerapplet
     hyprlock
     hypridle
+    nixfmt
+    zed-editor
+    nil
+    nixd
   ];
 
   #services.gnome-keyring = {
@@ -109,6 +113,40 @@ in
 
   xdg.configFile = {
     "hypr".source = link "/home/rui/nixos-conf/config/hypr";
+  };
+
+  gtk = {
+    enable = true;
+
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
+    };
+
+    # This is critical for some apps to respect the dark theme
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  };
+
+  # 2. Tell the system "My Preference is Dark" (Fixes 'System Color Scheme' in browsers)
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
+  };
+
+  # 3. Force Qt apps (VLC, Dolphin, etc.) to look like GTK apps
+  qt = {
+    enable = true;
+    platformTheme.name = "gtk";
+    style = {
+      name = "adwaita-dark";
+      package = pkgs.adwaita-qt;
+    };
   };
 
   programs.home-manager.enable = true;
