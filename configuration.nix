@@ -11,9 +11,9 @@
 
   security.pam.services = {
     sddm.enableKwallet = true;
-    sddm.enableGnomeKeyring = true;
+    #sddm.enableGnomeKeyring = true;
     login.enableKwallet = true;
-    login.enableGnomeKeyring = true;
+    #login.enableGnomeKeyring = true;
   };
 
   services.resolved = {

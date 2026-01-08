@@ -28,9 +28,9 @@ in
     networkmanagerapplet
   ];
 
-  services.gnome-keyring = {
-    enable = true;
-  };
+  #services.gnome-keyring = {
+  #  enable = true;
+  #};
 
   programs.zen-browser = {
     enable = true;
