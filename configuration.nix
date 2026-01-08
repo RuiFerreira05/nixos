@@ -43,7 +43,10 @@
 
   networking = {
     hostName = host;
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
     enableIPv6 = false;
     nameservers = [ 
       "1.1.1.1"
@@ -115,7 +118,7 @@
 
   users.users.${username} = {
     isNormalUser = true;
-    description = "main user";
+    description = "${username}";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
       kdePackages.kate

@@ -25,6 +25,7 @@ in
     zsh-powerlevel10k
     gcr
     onedriver
+    networkmanagerapplet
   ];
 
   services.gnome-keyring = {
