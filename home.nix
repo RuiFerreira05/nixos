@@ -1,4 +1,10 @@
-{ config, pkgs, username, inputs, ... }:
+{
+  config,
+  pkgs,
+  username,
+  inputs,
+  ...
+}:
 let
   link = config.lib.file.mkOutOfStoreSymlink;
 in
@@ -6,7 +12,7 @@ in
   imports = [
     inputs.zen-browser.homeModules.beta
   ];
-  
+
   home.username = username;
   home.homeDirectory = "/home/${username}";
   home.stateVersion = "25.11";
@@ -26,6 +32,8 @@ in
     gcr
     onedriver
     networkmanagerapplet
+    hyprlock
+    hypridle
   ];
 
   #services.gnome-keyring = {
@@ -46,7 +54,7 @@ in
     settings = {
       user = {
         name = "RuiFerreira05";
-	email = "ruimf.05@gmail.com";
+        email = "ruimf.05@gmail.com";
       };
       init.defaultBranch = "main";
     };
@@ -75,14 +83,17 @@ in
 
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "sudo" ];
+      plugins = [
+        "git"
+        "sudo"
+      ];
     };
 
     plugins = [
       {
         name = "powerlevel10k";
-	src = pkgs.zsh-powerlevel10k;
-	file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+        src = pkgs.zsh-powerlevel10k;
+        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
       }
     ];
 

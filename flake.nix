@@ -23,12 +23,20 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      nixos-hardware,
+      ...
+    }@inputs:
     let
       system = "x86_64-linux";
       host = "nixos";
       username = "rui";
-    in {
+    in
+    {
       nixosConfigurations = {
         "${host}" = nixpkgs.lib.nixosSystem {
           inherit system;
@@ -38,12 +46,12 @@
             ./configuration.nix
 
             nixos-hardware.nixosModules.lenovo-legion-15ach6h
-            
+
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-	      home-manager.backupFileExtension = "bak";
+              home-manager.backupFileExtension = "bak";
               home-manager.users.${username} = import ./home.nix;
               home-manager.extraSpecialArgs = { inherit inputs username; };
             }

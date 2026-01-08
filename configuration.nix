@@ -1,13 +1,23 @@
-{ config, pkgs, inputs, username, host, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  username,
+  host,
+  ...
+}:
 
 {
   imports = [ ./hardware-configuration.nix ];
 
   hardware.graphics.enable = true;
-  # services.xserver.videoDrivers = [ "nvidia" ];
-  # hardware.nvidia.open = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.open = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   security.pam.services = {
     sddm.enableKwallet = true;
@@ -28,7 +38,9 @@
   };
 
   # Bootloader.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages;
+  boot.extraModulePackages = [ config.boot.kernelPackages.lenovo-legion-module ];
+  boot.kernelModules = [ "lenovo-legion-module" ];
   boot.loader.systemd-boot.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader = {
@@ -48,9 +60,9 @@
       wifi.backend = "iwd";
     };
     enableIPv6 = false;
-    nameservers = [ 
+    nameservers = [
       "1.1.1.1"
-      "8.8.8.8" 
+      "8.8.8.8"
     ];
   };
 
@@ -68,7 +80,10 @@
 
   i18n.defaultLocale = "en_US.UTF-8";
 
-  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "pt_PT.UTF-8/UTF-8" ];
+  i18n.supportedLocales = [
+    "en_US.UTF-8/UTF-8"
+    "pt_PT.UTF-8/UTF-8"
+  ];
 
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "pt_PT.UTF-8";
@@ -90,7 +105,7 @@
       variant = "";
     };
   };
-  
+
   services.libinput.enable = true;
 
   services.blueman.enable = true;
@@ -121,7 +136,11 @@
   users.users.${username} = {
     isNormalUser = true;
     description = "${username}";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+    ];
     packages = with pkgs; [
       kdePackages.kate
     ];
@@ -137,7 +156,6 @@
   programs.hyprland.enable = true;
   programs.zsh.enable = true;
   programs.waybar.enable = true;
-  programs.hyprlock.enable = true;
 
   programs.steam = {
     enable = true;
@@ -154,7 +172,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim 
+    vim
     wget
     git
     kitty
@@ -169,9 +187,11 @@
     libnotify
     brightnessctl
     lenovo-legion
+    linuxHeaders
     playerctl
     unzip
     kdePackages.kwallet-pam
+    nixfmt
   ];
 
   qt.enable = true;
