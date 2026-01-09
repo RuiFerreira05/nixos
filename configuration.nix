@@ -19,6 +19,27 @@
     "flakes"
   ];
 
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 4d --keep 3";
+    flake = "/home/rui/nixos-conf";
+  };
+
+  # nix.gc = {
+  #   automatic = true;
+  #   dates = "weekly";
+  #   options = "--delete-older-than 7d";
+  # };
+  nix.settings.auto-optimise-store = true;
+
+  nixpkgs.config.allowUnfree = true;
+
+  nix.settings.trusted-users = [
+    "root"
+    username
+  ];
+
   security.pam.services = {
     sddm.enableKwallet = true;
     #sddm.enableGnomeKeyring = true;
@@ -117,8 +138,16 @@
 
   services.displayManager.sddm = {
     enable = true;
+    theme = "sddm-astronaut-theme";
     wayland.enable = true;
+
+    extraPackages = with pkgs; [
+      kdePackages.qtmultimedia
+      kdePackages.qtsvg
+      kdePackages.qtvirtualkeyboard
+    ];
   };
+
   services.desktopManager.plasma6.enable = true;
 
   services.printing.enable = true;
@@ -166,11 +195,6 @@
 
   services.upower.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim
     wget
@@ -191,6 +215,9 @@
     playerctl
     unzip
     kdePackages.kwallet-pam
+    (sddm-astronaut.override {
+      embeddedTheme = "cyberpunk"; # https://github.com/Keyitdev/sddm-astronaut-theme/tree/master/Themes
+    })
   ];
 
   qt.enable = true;

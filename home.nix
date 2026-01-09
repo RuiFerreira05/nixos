@@ -79,10 +79,17 @@ in
       nixconf = "sudo nvim ~/nixos-conf/configuration.nix";
       nixflake = "sudo nvim ~/nixos-conf/flake.nix";
       nixhome = "sudo nvim ~/nixos-conf/home.nix";
-      nixswitch = "sudo nixos-rebuild switch --flake ~/nixos-conf/";
-      nixtest = "sudo nixos-rebuild test --flake ~/nixos-conf/";
+      nixswitchold = "sudo nixos-rebuild switch --flake ~/nixos-conf/";
+      nixtestold = "sudo nixos-rebuild test --flake ~/nixos-conf/";
+      nixupdateold = "nix flake update /home/rui/nixos-conf/";
+      nixcleanallold = "sudo nix-collect-garbage -d";
       hyprconf = "sudo nvim ~/nixos-conf/config/hypr/hyprland.conf";
       codenix = "code -r ~/nixos-conf/";
+      zednix = "zed -r ~/nixos-conf/";
+      nixswitch = "nh os switch --ask /home/rui/nixos-config/";
+      nixtest = "nh os test /home/rui/nixos-config/";
+      nixcleanall = "nh clean all";
+      nixupdate = "nh os switch --ask --update /home/rui/nixos-config/";
     };
 
     oh-my-zsh = {
@@ -113,6 +120,8 @@ in
 
   xdg.configFile = {
     "hypr".source = link "/home/rui/nixos-conf/config/hypr";
+    "rofi".source = link "/home/rui/nixos-conf/config/rofi";
+    "waybar".source = link "/home/rui/nixos-conf/config/waybar";
   };
 
   gtk = {
@@ -123,7 +132,6 @@ in
       package = pkgs.gnome-themes-extra;
     };
 
-    # This is critical for some apps to respect the dark theme
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
     };
@@ -132,14 +140,12 @@ in
     };
   };
 
-  # 2. Tell the system "My Preference is Dark" (Fixes 'System Color Scheme' in browsers)
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
     };
   };
 
-  # 3. Force Qt apps (VLC, Dolphin, etc.) to look like GTK apps
   qt = {
     enable = true;
     platformTheme.name = "gtk";
