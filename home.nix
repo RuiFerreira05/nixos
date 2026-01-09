@@ -13,6 +13,11 @@ in
     inputs.zen-browser.homeModules.beta
   ];
 
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
   home.username = username;
   home.homeDirectory = "/home/${username}";
   home.stateVersion = "25.11";
@@ -81,15 +86,15 @@ in
       nixhome = "sudo nvim ~/nixos-conf/home.nix";
       nixswitchold = "sudo nixos-rebuild switch --flake ~/nixos-conf/";
       nixtestold = "sudo nixos-rebuild test --flake ~/nixos-conf/";
-      nixupdateold = "nix flake update /home/rui/nixos-conf/";
+      nixupdateold = "nix flake update ~/nixos-conf/";
       nixcleanallold = "sudo nix-collect-garbage -d";
       hyprconf = "sudo nvim ~/nixos-conf/config/hypr/hyprland.conf";
       codenix = "code -r ~/nixos-conf/";
       zednix = "zed -r ~/nixos-conf/";
-      nixswitch = "nh os switch --ask /home/rui/nixos-conf/";
-      nixtest = "nh os test /home/rui/nixos-conf/";
+      nixswitch = "nh os switch --ask ~/nixos-conf/";
+      nixtest = "nh os test ~/nixos-conf/";
       nixcleanall = "nh clean all";
-      nixupdate = "nh os switch --ask --update /home/rui/nixos-conf/";
+      nixupdate = "nh os switch --ask --update ~/nixos-conf/";
     };
 
     oh-my-zsh = {
@@ -116,12 +121,13 @@ in
 
   home.file = {
     ".p10k.zsh".source = ./config/p10k.zsh;
+    ".local/share/wallpapers".source = ./wallpapers;
   };
 
   xdg.configFile = {
-    "hypr".source = link "/home/rui/nixos-conf/config/hypr";
-    "rofi".source = link "/home/rui/nixos-conf/config/rofi";
-    "waybar".source = link "/home/rui/nixos-conf/config/waybar";
+    "hypr".source = link "./config/hypr";
+    "rofi".source = link "./config/rofi";
+    "waybar".source = link ".config/waybar";
   };
 
   gtk = {
