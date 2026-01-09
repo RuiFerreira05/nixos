@@ -86,10 +86,10 @@ in
       hyprconf = "sudo nvim ~/nixos-conf/config/hypr/hyprland.conf";
       codenix = "code -r ~/nixos-conf/";
       zednix = "zed -r ~/nixos-conf/";
-      nixswitch = "nh os switch --ask /home/rui/nixos-config/";
-      nixtest = "nh os test /home/rui/nixos-config/";
+      nixswitch = "nh os switch --ask /home/rui/nixos-conf/";
+      nixtest = "nh os test /home/rui/nixos-conf/";
       nixcleanall = "nh clean all";
-      nixupdate = "nh os switch --ask --update /home/rui/nixos-config/";
+      nixupdate = "nh os switch --ask --update /home/rui/nixos-conf/";
     };
 
     oh-my-zsh = {

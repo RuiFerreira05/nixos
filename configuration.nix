@@ -6,7 +6,23 @@
   host,
   ...
 }:
+let
 
+  cybergrub-theme = pkgs.stdenv.mkDerivation {
+    pname = "cybergrub-2077";
+    version = "1.0";
+
+    # Point this to where you put the repo
+    src = ./grub-themes/CyberGRUB-2077;
+
+    # The standard 'install' phase just copies the files
+    installPhase = ''
+      mkdir -p $out
+      cp -r CyberGRUB-2077/* $out/
+    '';
+  };
+
+in
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -71,6 +87,7 @@
       efiSupport = true;
       device = "nodev";
       useOSProber = true;
+      theme = cybergrub-theme;
     };
   };
 
@@ -215,8 +232,9 @@
     playerctl
     unzip
     kdePackages.kwallet-pam
+    kdePackages.qtmultimedia # bro... a duplicated qtmultimedia cause sddm-austronaut is dum
     (sddm-astronaut.override {
-      embeddedTheme = "cyberpunk"; # https://github.com/Keyitdev/sddm-astronaut-theme/tree/master/Themes
+      embeddedTheme = "jake_the_dog"; # https://github.com/Keyitdev/sddm-astronaut-theme/tree/master/Themes
     })
   ];
 
