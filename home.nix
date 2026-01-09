@@ -125,9 +125,9 @@ in
   };
 
   xdg.configFile = {
-    "hypr".source = link "./config/hypr";
-    "rofi".source = link "./config/rofi";
-    "waybar".source = link ".config/waybar";
+    "hypr".source = link "/home/rui/nixos-conf/config/hypr";
+    "rofi".source = link "/home/rui/nixos-conf/config/rofi";
+    "waybar".source = link "/home/rui/nixos-conf/config/waybar";
   };
 
   gtk = {
