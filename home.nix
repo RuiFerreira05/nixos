@@ -129,6 +129,7 @@ in
     "hypr".source = link "/home/${username}/nixos-conf/config/hypr";
     "rofi".source = link "/home/${username}/nixos-conf/config/rofi";
     "waybar".source = link "/home/${username}/nixos-conf/config/waybar";
+    "lazygit".source = link "/home/${username}/nixos-conf/config/lazygit";
   };
 
   gtk = {
