@@ -43,6 +43,7 @@ in
     zed-editor
     nil
     nixd
+    bat
   ];
 
   #services.gnome-keyring = {
@@ -125,9 +126,9 @@ in
   };
 
   xdg.configFile = {
-    "hypr".source = link "/home/rui/nixos-conf/config/hypr";
-    "rofi".source = link "/home/rui/nixos-conf/config/rofi";
-    "waybar".source = link "/home/rui/nixos-conf/config/waybar";
+    "hypr".source = link "/home/${username}/nixos-conf/config/hypr";
+    "rofi".source = link "/home/${username}/nixos-conf/config/rofi";
+    "waybar".source = link "/home/${username}/nixos-conf/config/waybar";
   };
 
   gtk = {
