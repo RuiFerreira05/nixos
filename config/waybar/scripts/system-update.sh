@@ -1,86 +1,63 @@
 #!/usr/bin/env bash
 
-# Check release
-if [ ! -f /etc/arch-release ]; then
-  exit 0
-fi
-
+# Check if flatpak is installed
 pkg_installed() {
-  local pkg=$1
-
-  if pacman -Qi "${pkg}" &>/dev/null; then
-    return 0
-  elif pacman -Qi "flatpak" &>/dev/null && flatpak info "${pkg}" &>/dev/null; then
-    return 0
-  elif command -v "${pkg}" &>/dev/null; then
-    return 0
-  else
-    return 1
-  fi
+    command -v "$1" &>/dev/null
 }
-
-get_aur_helper() {
-  if pkg_installed yay; then
-    aur_helper="yay"
-  elif pkg_installed paru; then
-    aur_helper="paru"
-  fi
-}
-
-get_aur_helper
-export -f pkg_installed
 
 # Trigger upgrade
 if [ "$1" == "up" ]; then
-  trap 'pkill -RTMIN+20 waybar' EXIT
-  command="
-    $0 upgrade
-    ${aur_helper} -Syu
-    if pkg_installed flatpak; then flatpak update; fi
-    printf '\n'
-    read -n 1 -p 'Press any key to continue...'
+    # Define the signal to refresh Waybar (matches your original script)
+    trap 'pkill -RTMIN+20 waybar' EXIT
+
+    # The command to run in the terminal
+    # 1. Update system using 'nh' (Updates flake.lock AND rebuilds)
+    # 2. Update Flatpaks if installed
+    command="
+    echo '--- ❄️ Updating NixOS System ❄️ ---';
+    nh os switch --update;
+
+    if command -v flatpak &>/dev/null; then
+        echo -e '\n--- 📦 Updating Flatpaks 📦 ---';
+        flatpak update -y;
+    fi
+
+    echo -e '\nDone! Press any key to exit...';
+    read -n 1;
     "
-  kitty --title "  System Update" sh -c "${command}"
+
+    # Launch Kitty
+    kitty --title " System Update" sh -c "${command}"
+    exit 0
 fi
 
-# Check for AUR updates
-if [ -n "$aur_helper" ]; then
-  aur_updates=$(${aur_helper} -Qua | grep -c '^')
-else
-  aur_updates=0
-fi
+# --- Count Updates ---
 
-# Check for official repository updates
-official_updates=$(
-  (while pgrep -x checkupdates >/dev/null; do sleep 1; done)
-  checkupdates | grep -c '^'
-)
-
-# Check for Flatpak updates
+# 1. Flatpak Updates
+# (This is the only thing we can count quickly without heavy CPU usage)
 if pkg_installed flatpak; then
-  flatpak_updates=$(flatpak remote-ls --updates | grep -c '^')
+    flatpak_updates=$(flatpak remote-ls --updates | grep -c '^')
 else
-  flatpak_updates=0
+    flatpak_updates=0
 fi
 
-# Calculate total available updates
-total_updates=$((official_updates + aur_updates + flatpak_updates))
+# 2. NixOS Updates
+# Calculating pending NixOS updates requires evaluating the whole flake,
+# which is too heavy for a status bar.
+# We simply mark it as '?' or '0' until you manually update.
+official_updates="?"
 
-# Handle formatting based on AUR helper
-if [ "$aur_helper" == "yay" ]; then
-  [ "${1}" == upgrade ] && printf "Official:  %-10s\nAUR ($aur_helper): %-10s\nFlatpak:   %-10s\n\n" "$official_updates" "$aur_updates" "$flatpak_updates" && exit
+# Calculate total (Only counting flatpaks really)
+total_updates=$flatpak_updates
 
-  tooltip="Official:  $official_updates\nAUR ($aur_helper): $aur_updates\nFlatpak:   $flatpak_updates"
+# Tooltip Output
+tooltip="<b>OS:</b> NixOS\n<b>Flatpak:</b> $flatpak_updates pending"
 
-elif [ "$aur_helper" == "paru" ]; then
-  [ "${1}" == upgrade ] && printf "Official:   %-10s\nAUR ($aur_helper): %-10s\nFlatpak:    %-10s\n\n" "$official_updates" "$aur_updates" "$flatpak_updates" && exit
-
-  tooltip="Official:   $official_updates\nAUR ($aur_helper): $aur_updates\nFlatpak:    $flatpak_updates"
-fi
-
-# Module and tooltip
-if [ $total_updates -eq 0 ]; then
-  echo "{\"text\":\"󰸟\", \"tooltip\":\"Packages are up to date\"}"
+# Module Output
+# If 0 flatpak updates, show "Up to date" icon
+if [ $flatpak_updates -eq 0 ]; then
+    echo "{\"text\":\"󰸟\", \"tooltip\":\"System is up to date (Flatpaks: 0)\", \"class\":\"updated\"}"
 else
-  echo "{\"text\":\"\", \"tooltip\":\"${tooltip//\"/\\\"}\"}"
+    # If updates exist, show the update icon and the count
+    echo "{\"text\":\" $flatpak_updates\", \"tooltip\":\"$tooltip\", \"class\":\"pending\"}"
 fi
