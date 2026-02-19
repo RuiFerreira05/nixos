@@ -47,6 +47,7 @@
     "custom/wifi",          // wi-fi
     "bluetooth",            // bluetooth
     "custom/update",        // system update
+    "tray",
     "custom/right5"
   ],
 

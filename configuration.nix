@@ -65,13 +65,24 @@ in
 
   services.resolved = {
     enable = true;
-    # Disable local broadcasting which can confuse some routers
-    extraConfig = ''
-      DNS=1.1.1.1 8.8.8.8
-      FallbackDNS=1.1.1.1 8.8.8.8
-      LLMNR=false
-      MulticastDNS=false
-    '';
+    settings = {
+      Resolve = {
+        DNS = "1.1.1.1 8.8.8.8";
+        FallbackDNS = "1.1.1.1 8.8.8.8";
+      };
+    };
+  };
+
+  services.openssh = {
+    enable = true;
+    ports = [ 22 ];
+    settings = {
+      PasswordAuthentication = false;
+      AllowUsers = null; # Allows all users by default. Can be [ "user1" "user2" ]
+      UseDns = true;
+      X11Forwarding = false;
+      PermitRootLogin = "prohibit-password"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
+    };
   };
 
   # Bootloader.
@@ -96,12 +107,19 @@ in
     networkmanager = {
       enable = true;
       wifi.backend = "iwd";
+      dns = "systemd-resolved";
     };
     enableIPv6 = false;
-    nameservers = [
-      "1.1.1.1"
-      "8.8.8.8"
-    ];
+    firewall = {
+      enable = true;
+      # 'loose' allows packets to return through a different interface
+      checkReversePath = "loose";
+      # Allow the firewall to trust Tailscale traffic
+      trustedInterfaces = [ "tailscale0" ];
+      # Allow Tailscale UDP (optional, but recommended for P2P connection)
+      allowedUDPPorts = [ config.services.tailscale.port ];
+      allowedTCPPorts = [ 22 ];
+    };
   };
 
   programs.nix-ld.enable = true;
@@ -179,6 +197,11 @@ in
     #jack.enable = true;
   };
 
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+  };
+
   users.users.${username} = {
     isNormalUser = true;
     description = "${username}";
@@ -237,6 +260,8 @@ in
       embeddedTheme = "jake_the_dog"; # https://github.com/Keyitdev/sddm-astronaut-theme/tree/master/Themes
     })
   ];
+
+  virtualisation.docker.enable = true;
 
   qt.enable = true;
 
